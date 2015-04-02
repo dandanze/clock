@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>my clock-use css3</title>
+	<style>
+		body{background-color:blue}
+		body,div{margin:0;padding:0;}
+		.myClock{position:relative;width: 360px;height:360px;margin:20px auto;}
+		.clock{display:inline-block;width:100%;height:100%;background:#333;border:solid 5px gold;border-radius:100%;}
+		.clock:after{content:'';width:20px;height:20px;position:absolute;z-index:999;top:50%;left:50%;margin-left:-10px;margin-top:-10px;background:gold;border-radius: 100%;box-shadow: 0 0 2px rgba(0,0,0,0.5);}
+		.myClock .hour,.myClock .minute,.myClock .second{position:absolute;transform-origin:center bottom;translateZ(0);}
+		.myClock .hour{width:12px;height:120px;background:#ddd;top:65px;left:179px;border-radius:6px;}
+		.myClock .minute{width:10px;height:160px;background:#ddd;top:23px;left:180px;border-radius:6px;}
+		.myClock .second{width:6px;height:172px;background:#ddd;top:12px;left:182px;border-radius:6px;}
+		.myClock p{color:#fff;text-align:center;}
+	</style>
+</head>
+<body>
+	<div class="myClock">
+		<i class="clock"></i>
+		<i class="hour" id="JclockHour"></i>
+		<i class="minute" id="JclockMinute"></i>
+		<i class="second" id="JclockSecond"></i>
+		<p id="Jtime"></p>
+		<p id="Jdate"></p>
+	</div>
+	
+	<script>
+		//时间
+		function startTime()
+		{
+			var today=new Date(),
+				year = today.getFullYear(),
+				month = today.getMonth()+1, //获取当前月份(0-11,0代表1月)
+				day = today.getDate(),
+				h=today.getHours(),
+				m=today.getMinutes(),
+				s = today.getSeconds();
+			m=checkTime(m);
+			s=checkTime(s);
+			//文字显示
+			document.getElementById('Jtime').innerHTML=h+":"+m+":"+s;
+			document.getElementById('Jdate').innerHTML=year+"年"+month+"月"+day+"日";
+			//表面显示
+			if(h>12){
+			    h = h -12;
+			}
+			//时
+			var hourDeg = h * 30 + m*30/60,
+				hourrotate = 'rotate('+hourDeg+'deg)';
+				hcss = '-moz-transform:' + hourrotate + ';-o-transform:' + hourrotate + ';-ms-transform:' + hourrotate;
+			document.getElementById('JclockHour').style.cssText = hcss;
+			document.getElementById('JclockHour').style.webkitTransform = hourrotate;//webkit
+			//分
+			var minuteDeg = m*6 + s*6/60,
+				minuterotate = 'rotate('+minuteDeg+'deg)',
+				minutecss = '-moz-transform:' + minuterotate + ';-o-transform:' + minuterotate + ';-ms-transform:' + minuterotate ;
+			document.getElementById('JclockMinute').style.cssText = minutecss;
+			document.getElementById('JclockMinute').style.webkitTransform = minuterotate;
+			
+			//秒
+			var secondDeg = s*6,
+				secondrotate = 'rotate('+secondDeg+'deg)',
+				secondcss = '-moz-transform:' + secondrotate + ';-o-transform:' + secondrotate + ';-ms-transform:' + secondrotate ;
+			document.getElementById('JclockSecond').style.cssText = secondcss;
+			document.getElementById('JclockSecond').style.webkitTransform = secondrotate;
+
+			t=setTimeout('startTime()',500);
+		}
+
+		function checkTime(i)
+		{
+			if (i<10) 
+			  {i="0" + i}
+			  return i
+		}
+		window.onload = function(){
+			startTime();
+		};
+	</script>
+</body>
+</html>
